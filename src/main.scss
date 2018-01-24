@@ -1,0 +1,17 @@
+body {
+  background-color: brown;
+
+}
+.hidden {
+  display: none;
+}
+.app-container{
+  margin: 0 auto;
+  width: 1200px;
+}
+.board-canvas {
+  margin-top: 100px;
+}
+.board-canvas canvas {
+  background-color: white;
+}
