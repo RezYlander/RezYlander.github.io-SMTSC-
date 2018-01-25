@@ -29,7 +29,7 @@ export class Board extends React.Component {
 
         star.onload = () => {
 
-            //TWORZENIE KOMET
+            //TWORZENIE GWIAZDEK
             this.starsDrawInterval = setInterval(()=>{
                 const starsSpawnYLocations = [0,50,100,150,200,250,300,350,400,450,500,550,600,650,700,750];
 
@@ -45,7 +45,7 @@ export class Board extends React.Component {
 
             },3000);
 
-            //PORUSZANIE KOMET
+            //PORUSZANIE GWIAZDEK
 
             this.starsMoveInterval = setInterval(()=>{
                 if(stars.length > 0) {
@@ -53,7 +53,7 @@ export class Board extends React.Component {
 
                         stars[i].x -=  50;
 
-                        //KOLIZJA
+                        //KOLIZJA Z GWIAZDKĄ
 
                         if(stars[i].x === 50 && stars[i].y === this.state.shipY) {
                             this.setState({
@@ -200,12 +200,6 @@ export class Board extends React.Component {
         this.drawComets(comet, ctx, ship);
         this.drawStars(star, ctx, ship);
 
-    }
-
-    componentDidUpdate(){
-    }
-
-    componentWillUnmount(){
     }
 
     render() {
