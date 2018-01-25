@@ -29,11 +29,17 @@ export class GameOver extends React.Component {
     render() {
         if (this.state.view === "gameover") {
             return (
-                <h1>
-                    GAMEOVER
+                <div className="gameover-container">
+                    <div className="text-effect">
+                        <h1 className="neon small" data-text="game over">Game Over</h1>
+                        <div className="gradient"/>
+                        <div className="spotlight"/>
+                    </div>
+                    <span>{this.props.playerName}</span>
+                    <span>{this.props.playerScore}</span> punktów
                     <button onClick={this.handleBackToMenu}>Wróć do menu</button>
                     <button onClick={this.handleHighScore}>High Score</button>
-                </h1>
+                </div>
             )
         } else if (this.state.view === "menu"){
             return (

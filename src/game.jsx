@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import Sound from 'react-sound';
 import {Board} from "./board.jsx";
 import {GameTitle} from "./game-title.jsx";
 import {GameHighScore} from "./score.jsx";
@@ -53,25 +53,32 @@ export class Game extends React.Component {
         if(this.state.view == "start")
         {
             return (
-                <div>
-                    <GameTitle/>
-                    <ul>
-                        <li><button onClick={this.handleNewGame}>Start Game</button></li>
-                        <li><button onClick={this.handleScore}>High Score</button></li>
-                    </ul>
+                <div className="game-menu-container">
+                    <div className="game-menu-title">
+                        <GameTitle/>
+                    </div>
+                    <div className="game-menu-buttons-container">
+                        <ul className="game-menu-buttons-list">
+                            <li><button onClick={this.handleNewGame}>Start Game</button></li>
+                            <li><button onClick={this.handleScore}>High Score</button></li>
+                        </ul>
+                    </div>
                 </div>
             )
         } else if(this.state.view == "popup") {
             return (
-                <div>
-                    <ul>
-                        <li>
-                            <form onSubmit={this.handleSubmit}>
-                                <label>{this.state.info}<input onChange={this.handleInputChange} type="text" value={this.state.user}/></label>
-                                <button type="submit">Utwórz ciecia</button>
-                            </form>
-                        </li>
-                    </ul>
+                <div className="player-container">
+                    <form onSubmit={this.handleSubmit} className="player-form">
+                        <label>
+                            <div className="text-effect">
+                                <h1 className="neon small" data-text={this.state.info}>{this.state.info}</h1>
+                                <div className="gradient"/>
+                                <div className="spotlight"/>
+                            </div>
+                        </label>
+                        <input onChange={this.handleInputChange} type="text" value={this.state.user}/>
+                        <button type="submit">Graj!</button>
+                    </form>
                 </div>
             )
         } else if (this.state.view == "score") {

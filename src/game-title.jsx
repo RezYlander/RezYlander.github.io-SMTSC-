@@ -10,9 +10,11 @@ export class GameTitle extends React.Component {
     }
     render(){
         return (
-            <h1>
-                SUPER-MEGA-TURBO-CRAP
-            </h1>
+            <div className="text-effect">
+                <h1 className="neon" data-text="SUPER-MEGA TURBO-CRAP">SUPER-MEGA TURBO-CRAP</h1>
+                <div className="gradient"/>
+                <div className="spotlight"/>
+            </div>
         )
     }
 }

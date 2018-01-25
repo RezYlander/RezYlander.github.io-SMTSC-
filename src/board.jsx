@@ -3,25 +3,112 @@ import {GameOver} from "./gameover.jsx";
 
 
 var ship = require('./img/ship-small.png');
-var comet = require('./img/metor-small.png');
+var comet = require('./img/comet-small.png');
+var life = require('./img/heart.png');
+var boom = require('./img/boom2-small.png');
 
 export class Board extends React.Component {
     constructor(props) {
-        const cometDefaultX = Math.floor(Math.floor(Math.random()*(1150-50+1)+50));
-        const cometDefaultY = Math.floor(Math.floor(Math.random()*(700-50+1)+50));
-
         super(props);
         this.state = {
             view: "board",
             shipY: 350,
-            cometX: cometDefaultX,
-            cometY: cometDefaultY,
+            points: 0,
+            life: 3,
         }
+
     }
+
+
+    drawComets = (comet, ctx, ship) => {
+        const comets = [];
+        const numberOfComets = 99999999999999;
+        let counter = 0;
+        let cometDefaultX = 1150;
+
+        const life1 = this.refs.life1;
+        const life2 = this.refs.life2;
+        const life3 = this.refs.life3;
+
+        const boom = this.refs.boom;
+
+        comet.onload = () => {
+
+            //TWORZENIE KOMET
+            this.cometsDrawInterval = setInterval(()=>{
+                const cometsSpawnYLocations = [0,50,100,150,200,250,300,350,400,450,500,550,600,650,700,750];
+
+                if(counter <= numberOfComets ) {
+                    let cometDefaultY = cometsSpawnYLocations[Math.floor(Math.random() * cometsSpawnYLocations.length)];//Math.floor(Math.floor(Math.random() * (700 - 50 + 1) + 50));
+                    comets.push({
+                        x: cometDefaultX,
+                        y: cometDefaultY
+                    });
+                    ctx.drawImage(comet, cometDefaultX, cometDefaultY);
+                    counter++;
+                } else {
+                    clearInterval(this.cometsDrawInterval);
+                    this.setState ({
+                        view: "gameover"
+                    })
+                }
+
+            },500);
+
+            //PORUSZANIE KOMET
+
+            this.cometsMoveInterval = setInterval(()=>{
+                if(comets.length > 0) {
+                    for (let i = 0; i < counter; i++) {
+
+                        comets[i].x -=  50;
+
+                        //KOLIZJA
+
+                        if(comets[i].x === 50 && comets[i].y === this.state.shipY) {
+                            this.setState({
+                                life: this.state.life - 1,
+                            });
+                            if (this.state.life === 2){
+                                life3.classList.add("hidden")
+                            } else if (this.state.life === 1){      // EFEKT KOLIZJI
+                                life2.classList.add("hidden")
+                            } else if(this.state.life === 0){
+                                this.setState({
+                                    view: "gameover",
+                                });
+                                life1.classList.add("hidden")
+                            }
+                            ctx.clearRect(comets[i].x + 50, comets[i].y, 50, 50);
+                            ctx.drawImage(boom, comets[i].x, comets[i].y);
+
+                        }else{
+                            ctx.clearRect(comets[i].x + 50, comets[i].y, 50, 50); // NORMALNY LOT KOMET
+                            ctx.drawImage(comet, comets[i].x, comets[i].y);
+                        }
+                        if (comets[i].x === 0 && comets[i].y === this.state.shipY){ // ZAPOBIEGANIE ZNIKNIECIU STATKU PO KOLIZJI
+                            ctx.drawImage(ship, comets[i].x +50, comets[i].y);
+                            ctx.clearRect(comets[i].x, comets[i].y, 50, 50);
+
+                        }
+                        if (comets[i].x === 0 && comets[i].y !== this.state.shipY && this.state.life > 0){ //NABIJANIE PUNKTÓW
+                            this.setState({
+                                points: this.state.points + 10,
+                            })
+                        }
+                    }
+                }
+            },250);
+        };
+    };
+
     componentDidMount() {
         const ctx = this.refs.canvas.getContext('2d');
         const ship = this.refs.ship;
         const comet = this.refs.comet;
+
+
+
 
         ship.onload = () => {
             ctx.drawImage(ship, 50, this.state.shipY)
@@ -37,7 +124,6 @@ export class Board extends React.Component {
                         });
                         ctx.clearRect(50,this.state.shipY+50, 50, 50);
                     }
-                    console.log(this.state.shipY);
                     break;
                 case 39:
                     break;
@@ -48,47 +134,47 @@ export class Board extends React.Component {
                         });
                         ctx.clearRect(50,this.state.shipY-50, 50, 50);
                     }
-                    console.log(this.state.shipY);
                     break;
             }
             ctx.drawImage(ship, 50, this.state.shipY);
         };
 
-        comet.onload = () => {
-            ctx.drawImage(comet, this.state.cometX, this.state.cometY )
-        };
-        this.cometsIntervalId = setInterval(()=>{
-            this.setState({
-                cometX: this.state.cometX - 50
-            });
-            ctx.clearRect(this.state.cometX+50,this.state.cometY, 50, 50);
-        },500);
+        this.drawComets(comet, ctx, ship);
 
     }
 
     componentDidUpdate(){
-        const ctx = this.refs.canvas.getContext('2d');
-        const comet = this.refs.comet;
-
-        ctx.drawImage(comet, this.state.cometX, this.state.cometY )
     }
 
     componentWillUnmount(){
-        clearInterval(this.cometsIntervalId);
     }
 
     render() {
         if (this.state.view === "board") {
             return (
-                <div className="board-canvas">
-                    <canvas ref="canvas" width={1200} height={750} />
-                    <img ref="ship" src={ship} className="hidden" />
-                    <img ref="comet" src ={comet} className="hidden"/>
+                <div className="board">
+                    <div className="board-stats-container">
+                        <ul className="board-stats-list">
+                            <li>
+                                <img ref="life1" src={life}/>
+                                <img ref="life2" src={life}/>
+                                <img ref="life3" src={life}/>
+                            </li>
+                            <li>Kapitan: {this.props.playerName}</li>
+                            <li>Punkty: {this.state.points}</li>
+                        </ul>
+                    </div>
+                    <div className="board-canvas">
+                        <canvas className="real-canvas" ref="canvas" width={1200} height={750} />
+                        <img ref="ship" src={ship} className="hidden" />
+                        <img ref="comet" src ={comet} className="hidden"/>
+                        <img ref="boom" src ={boom} className="hidden"/>
+                    </div>
                 </div>
             )
         } else if (this.state.view === "gameover"){
             return (
-                <GameOver playerName={this.props.playerName}/>
+                <GameOver playerName={this.props.playerName} playerScore={this.state.points}/>
             )
         }
     }
