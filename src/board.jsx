@@ -6,6 +6,7 @@ var ship = require('./img/ship-small.png');
 var comet = require('./img/comet-small.png');
 var life = require('./img/heart.png');
 var boom = require('./img/boom2-small.png');
+var star = require('./img/star-small.png');
 
 export class Board extends React.Component {
     constructor(props) {
@@ -18,6 +19,62 @@ export class Board extends React.Component {
         }
 
     }
+
+    drawStars = (star, ctx, ship) => {
+        const stars = [];
+        const numberOfstars = 333333333;
+        let counter = 0;
+        let starDefaultX = 1150;
+
+
+        star.onload = () => {
+
+            //TWORZENIE KOMET
+            this.starsDrawInterval = setInterval(()=>{
+                const starsSpawnYLocations = [0,50,100,150,200,250,300,350,400,450,500,550,600,650,700,750];
+
+                if(counter <= numberOfstars ) {
+                    let starDefaultY = starsSpawnYLocations[Math.floor(Math.random() * starsSpawnYLocations.length)];//Math.floor(Math.floor(Math.random() * (700 - 50 + 1) + 50));
+                    stars.push({
+                        x: starDefaultX,
+                        y: starDefaultY
+                    });
+                    ctx.drawImage(star, starDefaultX, starDefaultY);
+                    counter++;
+                }
+
+            },3000);
+
+            //PORUSZANIE KOMET
+
+            this.starsMoveInterval = setInterval(()=>{
+                if(stars.length > 0) {
+                    for (let i = 0; i < counter; i++) {
+
+                        stars[i].x -=  50;
+
+                        //KOLIZJA
+
+                        if(stars[i].x === 50 && stars[i].y === this.state.shipY) {
+                            this.setState({
+                                points: this.state.points + 100,
+                            });
+                            ctx.clearRect(stars[i].x + 50, stars[i].y, 50, 50);
+                            ctx.drawImage(ship, stars[i].x, stars[i].y);
+
+                        }else{
+                            ctx.clearRect(stars[i].x + 50, stars[i].y, 50, 50); // NORMALNY LOT KOMET
+                            ctx.drawImage(star, stars[i].x, stars[i].y);
+                        }
+                        if (stars[i].x === 0 && stars[i].y === this.state.shipY){ // ZAPOBIEGANIE ZNIKNIECIU STATKU PO KOLIZJI
+                            ctx.drawImage(ship, stars[i].x +50, stars[i].y);
+                            ctx.clearRect(stars[i].x, stars[i].y, 50, 50);
+                        }
+                    }
+                }
+            },250);
+        };
+    };
 
 
     drawComets = (comet, ctx, ship) => {
@@ -106,6 +163,7 @@ export class Board extends React.Component {
         const ctx = this.refs.canvas.getContext('2d');
         const ship = this.refs.ship;
         const comet = this.refs.comet;
+        const star = this.refs.star;
 
 
 
@@ -140,6 +198,7 @@ export class Board extends React.Component {
         };
 
         this.drawComets(comet, ctx, ship);
+        this.drawStars(star, ctx, ship);
 
     }
 
@@ -169,6 +228,8 @@ export class Board extends React.Component {
                         <img ref="ship" src={ship} className="hidden" />
                         <img ref="comet" src ={comet} className="hidden"/>
                         <img ref="boom" src ={boom} className="hidden"/>
+                        <img ref="star" src ={star} className="hidden"/>
+
                     </div>
                 </div>
             )
