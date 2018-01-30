@@ -99,6 +99,22 @@ body {
   text-transform: uppercase;
 }
 
+.score-container {
+  color: white;
+  font-size: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.score-container button {
+  font-family: 'VT323', monospace;
+  font-size: 2rem;
+  width: 15rem;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
 
 // Change the colors
 $color1: red;

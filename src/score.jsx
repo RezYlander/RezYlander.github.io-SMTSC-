@@ -1,5 +1,6 @@
 import React from 'react';
 import {Game} from "./game.jsx";
+import {HighScoreTable} from "./score-table.jsx";
 
 export class GameHighScore extends React.Component {
 
@@ -19,10 +20,13 @@ export class GameHighScore extends React.Component {
     render(){
         if (this.state.view === "score"){
             return (
-                <div>
-                    <h1>
-                        SCORE
-                    </h1>
+                <div className="score-container">
+                    <div className="text-effect">
+                        <h1 className="neon small" data-text="High Score">High Score</h1>
+                        <div className="gradient"/>
+                        <div className="spotlight"/>
+                    </div>
+                    <HighScoreTable/>
                     <button onClick={this.handleBackToMenu}>Wróć do menu</button>
                 </div>
             )

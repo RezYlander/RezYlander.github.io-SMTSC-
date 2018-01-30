@@ -76,7 +76,6 @@ export class Board extends React.Component {
         };
     };
 
-
     drawComets = (comet, ctx, ship) => {
         const comets = [];
         const numberOfComets = 99999999999999;
@@ -165,12 +164,9 @@ export class Board extends React.Component {
         const comet = this.refs.comet;
         const star = this.refs.star;
 
-
-
-
         ship.onload = () => {
             ctx.drawImage(ship, 50, this.state.shipY)
-        };
+        };   //SHIP
         window.onkeydown = (e) =>{
             switch (e.keyCode) {
                 case 37:
@@ -195,7 +191,7 @@ export class Board extends React.Component {
                     break;
             }
             ctx.drawImage(ship, 50, this.state.shipY);
-        };
+        }; //SHIP MOVE
 
         this.drawComets(comet, ctx, ship);
         this.drawStars(star, ctx, ship);
