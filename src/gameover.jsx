@@ -4,26 +4,38 @@ import {GameHighScore} from "./score.jsx";
 
 export class GameOver extends React.Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             view: "gameover",
-            user: this.props.playerName
+            user: this.props.playerName,
+            score: this.props.playerScore
         }
     }
 
-    handleBackToMenu =()=>{
-      this.setState({
-          view: "menu"
-      })
+    handleBackToMenu = () => {
+        this.setState({
+            view: "menu"
+        })
     };
-    handleHighScore =()=>{
+    handleHighScore = () => {
         this.setState({
             view: "score"
         })
     };
-    componentDidMount(){
-        console.log(this.props.playerName)
+
+    componentDidMount() {
+
+        let playerData = { name: this.state.user, score: this.state.score};
+
+        let fetchData = {
+            method: 'POST',
+            body:  JSON.stringify(playerData),
+            headers: {'Content-Type': 'application/json'}
+        };
+
+        fetch('http://localhost:3000/players', fetchData)
+            .then((resp) => resp.json())
     }
 
     render() {
@@ -41,11 +53,11 @@ export class GameOver extends React.Component {
                     <button onClick={this.handleHighScore}>High Score</button>
                 </div>
             )
-        } else if (this.state.view === "menu"){
+        } else if (this.state.view === "menu") {
             return (
                 <Game/>
             )
-        } else if (this.state.view === "score"){
+        } else if (this.state.view === "score") {
             return (
                 <GameHighScore/>
             )

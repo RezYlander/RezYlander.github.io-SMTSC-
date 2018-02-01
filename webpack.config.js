@@ -18,7 +18,7 @@ module.exports = {
     compress: true,
     hot: true,
     inline: true,
-    port: 8800
+    port: 9000
   },
   module: {
     rules: [
@@ -57,7 +57,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'index.html'),
+      template: path.join(__dirname, 'dist', 'index.html'),
       hash: true
     }),
     new webpack.HotModuleReplacementPlugin(),

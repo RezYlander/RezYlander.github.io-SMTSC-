@@ -1,6 +1,34 @@
 {
   "players": [
-    { "id": 1, "name": "Boski Edek", "score": "50000" },
-    { "id": 2, "name": "Randomowy Woodstockowicz", "score": "60000" }
+    {
+      "id": 1,
+      "name": "Boski Edek",
+      "score": "50000"
+    },
+    {
+      "id": 2,
+      "name": "Randomowy Woodstockowicz",
+      "score": "60000"
+    },
+    {
+      "id": 3,
+      "name": "Grzybiarka Janina",
+      "score": "40001"
+    },
+    {
+      "id": 4,
+      "name": "Grzybiarka Janina",
+      "score": "40002"
+    },
+    {
+      "id": 5,
+      "name": "Grzybiarka Janina",
+      "score": "40003"
+    },
+    {
+      "id": 6,
+      "name": "Grzybiarka Janina",
+      "score": "40004"
+    }
   ]
 }

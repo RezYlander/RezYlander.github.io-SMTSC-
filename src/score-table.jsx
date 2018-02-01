@@ -1,49 +1,42 @@
 import React from 'react';
 
 export class HighScoreTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            playersArr: [],
+        }
+    }
 
-    getPlayers =()=> {
-        fetch('http://localhost:3000/players')
-            .then( resp => {
-                return resp.json();
-            }).then( respond => {
-            const players = respond;
-            console.log(players)
-        })
-    };
 
-    getPlayersNames =()=> {
+    componentDidMount() {
+
         fetch('http://localhost:3000/players')
-            .then( resp => {
-                return resp.json();
-            }).then( respond => {
-            const playersNames = respond.map(element=>{
-                return element.Name
+            .then((resp) => resp.json())
+            .then((resp) => {
+                this.setState({
+                    playersArr: resp
+                })
             });
-            console.log(playersNames)
-        })
-    };
+    }
 
-    getPlayersScore =()=> {
-        fetch('http://localhost:3000/players')
-            .then( resp => {
-                return resp.json();
-            }).then( respond => {
-                const playersScores = respond.map(element=>{
-                    return element.Score
-            });
-            console.log(playersScores)
-        })
-    };
+    render() {
 
-    render(){
-        const playersScores = this.getPlayersScore();
-        const playersNames = this.getPlayersNames();
-        const players = this.getPlayers();
         return (
-            <div className="score-table">
-                <h1>HIGH SCORE</h1>
-            </div>
+            <table className="score-table">
+                <tbody>
+                    {this.state.playersArr.sort((a,b)=>{
+                    return b.score - a.score
+                    }).slice(0,10).map((player) => {
+                    return (
+                        <tr key={player.score}>
+                            <th style={{textAlign: "left"}}>{player.name}</th>
+                            <th style={{paddingLeft: "20px"}}>{player.score}</th>
+                        </tr>
+                    )
+                    })}
+                </tbody>
+            </table>
         )
     }
 }
